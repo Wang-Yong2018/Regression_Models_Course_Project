@@ -1,0 +1,96 @@
+---
+title: "Is an automatic or manual transmission better for MPG"
+author: "WangYong"
+date: "2022/1/29"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- two pages
+## 1. Executive Summary
+Based on both data explorary plot mode and linear model coefficients check, it can be confidence to answer below to questions:
+## Q1. Is an automatic or manual transmission better for MPG?
+Yes. Compared to automatic transmission, manual is better for MPG. This answer will be showed in both boxplot EDA stage and linear mode coefficients interpret stage. 
+### Q2. Quantify the MPG difference between automatic and manual transmissions
+It is 7.24 mpg. The manual type can run extra 7.24 mpg than automatic type transmission. the difference could be found when we study the linear model coefficents.
+
+
+## 2. Exploratory Data Analysis
+The mtcars data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption(mpg) and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models). 
+
+There are total 32 observation and 11 variable. In this project, we will focuse on the mpg(response variable) and am(independent variable). The variable 'am' is for Transmission type(0 for automatic, 1 for manual).  
+
+First, let's quick look the data.
+```{r head, echo=FALSE, message=FALSE}
+library(ggplot2)
+data(mtcars)
+head(mtcars[, c('mpg','am')])
+```
+Then, let use box plot have a overview of mpg compare am transmission.
+
+```{r eda, echo=FALSE,messages=FALSE}
+library(ggplot2)
+data(mtcars)
+g<-ggplot(data=mtcars, aes(factor(am),mpg))
+g+geom_boxplot()+labs(
+x='Transmission Type:(0 for automatic drive, 1 for manual drive)',
+y= 'Miles(US)/gallon',
+title = 'Compare automatic and manual transmission to MPG')
+
+```
+For above figures, it can be clear find the different transmission type lead to different mile per gallon. The automatica transmission mean is about 17 miles per gallon. The manual type is a bit higher than automatic, 24 mile per gallon. 
+
+## Interpret Coefficents
+Next, let's build linear model to check and interpret the coefficent to see the detail.
+
+```{r coefficents, echo=FALE, message=FALSE}
+fit <-lm(data=mtcars, mpg~factor(am))
+round(summary(fit)$coefficients,4)
+```
+
+From about table, we can build linear model as: mpg = 17.15 + 7.24 * am. For automatic type transmission(am=0) which used as reference, the Expected mpg is 17.15, for manual type(am=1), the expected mpg = 17.15 + 7.24=24.39. 
+
+Moreover, it should for every gallon, the car can run 17.15 miles if use automatic transmission type(am=0). The manual type, the can run 24.39231 miles/gallon.  
+
+Thirdly, The manual type transmission is more power than automatic transmission. 
+
+Last but not least, both automatic and manual transmission type coefficient is significant. the confidence level is significant(>95%). 
+
+```{r anova, echo=FALSE, message=FALSE}
+
+fit_a <- lm(data=mtcars[mtcars$am==0,],mpg~am)
+fit_m <- lm(data=mtcars[mtcars$am==1,],mpg~am)
+t.test(fit_a~fit_m)
+```
+## Model selection
+
+
+## Residual & Diagnostics Plot
+```{r residual, echo=FALSE, message=FALSE}
+plot(fit)
+```
+
+## Conclusion(Inference)
+
+?Did the student fit multiple models and detail their strategy for model selection?
+
+Did the student do a residual plot and some diagnostics?
+
+Did the student quantify the uncertainty in their conclusions and/or perform an inference correctly?
+
+Was the report brief (about 2 pages long) for the main body of the report and no longer than 5 with supporting appendix of figures?
+
+Did the report include an executive summary?
+
+Was the report done in Rmd (knitr)? 
+## Appendix figures:
+no more than 5 pages
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
